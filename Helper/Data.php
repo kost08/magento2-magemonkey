@@ -31,14 +31,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Ebizmarts\MageMonkey\Model\Logger\Magemonkey $logger
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Ebizmarts\MageMonkey\Model\Logger\Magemonkey $logger,
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface
     )
     {
         $this->_storeManager                = $storeManager;
