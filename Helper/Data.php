@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
     protected $_mlogger;
     protected $_groupRepositoryInterface;
-    protected $_scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -42,7 +42,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_storeManager                = $storeManager;
         $this->_mlogger                     = $logger;
         $this->_groupRepositoryInterface    = $groupRepositoryInterface;
-        $this->_scopeConfig                 = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -52,7 +51,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
     public function isDoubleOptInEnabled($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_CONFIRMATION_FLAG, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(self::XML_PATH_CONFIRMATION_FLAG, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
     public function getApiKey($store = null)
     {
