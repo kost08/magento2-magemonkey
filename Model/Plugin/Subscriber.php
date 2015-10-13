@@ -75,4 +75,52 @@ class Subscriber
             }
         }
     }
+
+    /**
+     * @param \Magento\Newsletter\Model\Subscriber $subscriber
+     * @param \Closure $proceed
+     * @return mixed
+     */
+    public function aroundUnsubscribe(
+        \Magento\Newsletter\Model\Subscriber $subscriber,
+        \Closure $proceed
+    )
+    {
+        $monkeyId = $subscriber->getMagemonkeyId();
+        $result = $proceed();
+        if($result::STATUS_UNSUBSCRIBED == $result->getStatus() && $monkeyId);
+        {
+            $api = New \Ebizmarts\MageMonkey\Model\Api(array(),$this->_helper);
+            $return = $api->listDeleteMember($this->_helper->getDefaultList(), $monkeyId);
+            $result->setMagemonkeyId('')->save();
+        }
+        return $result;
+    }
+
+    /**
+     * @param \Magento\Newsletter\Model\Subscriber $subscriber
+     * @param \Closure $proceed
+     * @param $email
+     * @return mixed
+     */
+    public function aroundSubscribe
+    (
+        \Magento\Newsletter\Model\Subscriber $subscriber,
+        \Closure $proceed,
+        $email
+    )
+    {
+        $result = $proceed($email);
+        $storeId = $subscriber->getStoreId();
+        if($this->_helper->isMonkeyEnabled($storeId)) {
+            $api = New \Ebizmarts\MageMonkey\Model\Api(array(), $this->_helper);
+            $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $email, 'email_type' => 'html', 'status' => 'subscribed');
+            $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
+            if (isset($return->id)) {
+                $subscriber->setMagemonkeyId($return->id)->save();
+            }
+        }
+
+        return $result;
+    }
 }
