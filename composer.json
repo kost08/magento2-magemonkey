@@ -1,6 +1,12 @@
 {
     "name": "ebizmarts/magento2-magemonkey",
-    "description": "Connect Mailchimp with Magento",
+    "description": "MailChimp integration for Magento 2 based on https://github.com/ebizmarts/magento2-magemonkey.",
+    "require": {
+      "php": "~5.5.0|~5.6.0",
+      "magento/framework": "~1.0.0-beta",
+      "magento/magento-composer-installer": "*",
+      "magento/module-newsletter": "*"
+    },
     "type": "magento2-module",
     "version": "3.0.4-beta",
     "license": [

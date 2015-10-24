@@ -9,20 +9,21 @@
 
 namespace Ebizmarts\MageMonkey\Model\Resource;
 
-class Setup  extends \Magento\Framework\Module\DataSetup
+class Setup  extends \Magento\Framework\Module\Setup
 {
+
     /**
-     * @param \Magento\Framework\Module\Setup\Context $context
+     * @param \Magento\Framework\App\Resource $resource
      * @param string $resourceName
      * @param string $moduleName
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Module\Setup\Context $context,
+        \Magento\Framework\App\Resource $resource,
         $resourceName,
         $moduleName = 'Ebizmarts_MageMonkey',
-        $connectionName = \Magento\Framework\Module\Updater\SetupInterface::DEFAULT_SETUP_CONNECTION
+        $connectionName = \Magento\Framework\Setup\ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
-        parent::__construct($context, $resourceName, $moduleName, $connectionName);
+        parent::__construct($resource, $connectionName);
     }
 }

@@ -24,27 +24,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
     protected $_mlogger;
     protected $_groupRepositoryInterface;
-    protected $_scopeConfig;
+    protected $scopeConfig;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Ebizmarts\MageMonkey\Model\Logger\Magemonkey $logger
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Ebizmarts\MageMonkey\Model\Logger\Magemonkey $logger,
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface
     )
     {
         $this->_storeManager                = $storeManager;
         $this->_mlogger                     = $logger;
         $this->_groupRepositoryInterface    = $groupRepositoryInterface;
-        $this->_scopeConfig                 = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -54,7 +51,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
     public function isDoubleOptInEnabled($store = null)
     {
-        return $this->_scopeConfig->getValue(self::XML_PATH_CONFIRMATION_FLAG, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->getValue(self::XML_PATH_CONFIRMATION_FLAG, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
     }
     public function getApiKey($store = null)
     {
