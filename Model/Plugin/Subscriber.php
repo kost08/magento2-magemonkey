@@ -127,10 +127,11 @@ class Subscriber
     public function aroundConfirm
     (
         \Magento\Newsletter\Model\Subscriber $subscriber,
-        \Closure $proceed
+        \Closure $proceed,
+        $code
     )
     {
-        $result = $proceed();
+        $result = $proceed($code);
         if($result)
         {
             $storeId = $subscriber->getStoreId();
