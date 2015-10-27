@@ -103,24 +103,47 @@ class Subscriber
      * @param $email
      * @return mixed
      */
-    public function aroundSubscribe
+//    public function aroundSubscribe
+//    (
+//        \Magento\Newsletter\Model\Subscriber $subscriber,
+//        \Closure $proceed,
+//        $email
+//    )
+//    {
+//        $result = $proceed($email);
+//        $storeId = $subscriber->getStoreId();
+////        if($this->_helper->isMonkeyEnabled($storeId)) {
+////            $api = New \Ebizmarts\MageMonkey\Model\Api(array(), $this->_helper);
+////            $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $email, 'email_type' => 'html', 'status' => 'subscribed');
+////            $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
+////            if (isset($return->id)) {
+////                $subscriber->setMagemonkeyId($return->id)->save();
+////            }
+////        }
+//
+//        return $result;
+//    }
+
+    public function aroundConfirm
     (
         \Magento\Newsletter\Model\Subscriber $subscriber,
         \Closure $proceed,
-        $email
+        $code
     )
     {
-        $result = $proceed($email);
-        $storeId = $subscriber->getStoreId();
-        if($this->_helper->isMonkeyEnabled($storeId)) {
-            $api = New \Ebizmarts\MageMonkey\Model\Api(array(), $this->_helper);
-            $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $email, 'email_type' => 'html', 'status' => 'subscribed');
-            $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
-            if (isset($return->id)) {
-                $subscriber->setMagemonkeyId($return->id)->save();
+        $result = $proceed($code);
+        if($result)
+        {
+            $storeId = $subscriber->getStoreId();
+            if($this->_helper->isMonkeyEnabled($storeId)) {
+                $api = New \Ebizmarts\MageMonkey\Model\Api(array(), $this->_helper);
+                $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $subscriber->getEmail(), 'email_type' => 'html', 'status' => 'subscribed');
+                $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
+                if (isset($return->id)) {
+                    $subscriber->setMagemonkeyId($return->id)->save();
+                }
             }
         }
-
         return $result;
     }
 }

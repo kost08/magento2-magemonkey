@@ -27,12 +27,15 @@
         </arguments>
     </type>
 
-    <type name="Magento\Newsletter\Model\Subscriber">
+    <type name="Ebizmarts\MageMonkey\Model\Subscriber">
         <plugin name="magemonkey-subscriber" type="Ebizmarts\MageMonkey\Model\Plugin\Subscriber" sortOrder="10"/>
     </type>
 
     <!--<type name="Magento\Config\Model\Config">
         <plugin name="magemonkey-save" type="Ebizmarts\MageMonkey\Model\Plugin\Config" sortOrder="10"/>
     </type>-->
+
+    <preference for="Magento\Newsletter\Model\Subscriber"
+                type="Ebizmarts\MageMonkey\Model\Subscriber" />
 
 </config>
