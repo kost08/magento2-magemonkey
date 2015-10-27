@@ -103,14 +103,14 @@ class Subscriber
      * @param $email
      * @return mixed
      */
-    public function aroundSubscribe
-    (
-        \Magento\Newsletter\Model\Subscriber $subscriber,
-        \Closure $proceed,
-        $email
-    )
-    {
-        $result = $proceed($email);
+//    public function aroundSubscribe
+//    (
+//        \Magento\Newsletter\Model\Subscriber $subscriber,
+//        \Closure $proceed,
+//        $email
+//    )
+//    {
+//        $result = $proceed($email);
 //        $storeId = $subscriber->getStoreId();
 ////        if($this->_helper->isMonkeyEnabled($storeId)) {
 ////            $api = New \Ebizmarts\MageMonkey\Model\Api(array(), $this->_helper);
@@ -120,9 +120,9 @@ class Subscriber
 ////                $subscriber->setMagemonkeyId($return->id)->save();
 ////            }
 ////        }
-
-        return $result;
-    }
+//
+//        return $result;
+//    }
 
     public function aroundConfirm
     (
