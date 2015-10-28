@@ -75,8 +75,6 @@ class Subscriber extends \Magento\Newsletter\Model\Subscriber
             } else {
                 $this->sendConfirmationSuccessEmail();
             }
-            $id = $this->getId();
-            $link = $this->getConfirmationLink();
             return $this->getStatus();
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
