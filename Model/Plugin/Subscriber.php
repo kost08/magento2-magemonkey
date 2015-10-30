@@ -25,19 +25,27 @@ class Subscriber
      */
     protected $_customerSession;
     /**
+     * @var \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory
+     */
+    private $subscriberCollectionFactory;
+
+    /**
      * @param \Ebizmarts\MageMonkey\Helper\Data $helper
      * @param \Magento\Customer\Model\Customer $customer
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
      */
     public function __construct(
         \Ebizmarts\MageMonkey\Helper\Data $helper,
         \Magento\Customer\Model\Customer $customer,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
     )
     {
         $this->_helper          = $helper;
         $this->_customer        = $customer;
         $this->_customerSession = $customerSession;
+        $this->subscriberCollectionFactory = $subscriberCollectionFactory;
     }
 
     public function afterUnsubscribeCustomerById(
@@ -69,9 +77,14 @@ class Subscriber
                 $status = 'subscribed';
             }
             $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $subscriber->getEmail(), 'email_type' => 'html', 'status' => $status, /*'merge_fields' => $mergeVars*/);
-            $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
-            if (isset($return->id)) {
-                $subscriber->setMagemonkeyId($return->id)->save();
+            $subscriberCollection = $this->subscriberCollectionFactory->create();
+            $collection = $subscriberCollection->load()
+                ->addFieldToFilter("subscriber_email", array('eq' => $subscriber->getEmail()));
+            if(!$collection->count()){
+                $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
+                if (isset($return->id)) {
+                    $subscriber->setMagemonkeyId($return->id)->save();
+                }
             }
         }
     }
