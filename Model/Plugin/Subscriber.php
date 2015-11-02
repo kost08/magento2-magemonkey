@@ -160,4 +160,20 @@ class Subscriber
         }
         return $result;
     }
+
+    public function aroundDelete(
+        \Magento\Newsletter\Model\Subscriber $subscriber,
+        \Closure $proceed
+    )
+    {
+        $monkeyId = $subscriber->getMagemonkeyId();
+        $result = $proceed();
+        if($monkeyId);
+        {
+            $api = New \Ebizmarts\MageMonkey\Model\Api(array(),$this->_helper);
+            $return = $api->listDeleteMember($this->_helper->getDefaultList(), $monkeyId);
+            $result->setMagemonkeyId('')->save();
+        }
+        return $result;
+    }
 }
