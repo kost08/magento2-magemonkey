@@ -77,10 +77,12 @@ class Subscriber
                 $status = 'subscribed';
             }
             $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $subscriber->getEmail(), 'email_type' => 'html', 'status' => $status, /*'merge_fields' => $mergeVars*/);
+
             $subscriberCollection = $this->subscriberCollectionFactory->create();
             $collection = $subscriberCollection->load()
                 ->useOnlySubscribed()
                 ->addFieldToFilter("subscriber_email", array('eq' => $subscriber->getEmail()));
+
             if(!$collection->count()){
                 $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
                 if (isset($return->id)) {
