@@ -25,7 +25,7 @@ class Subscriber
      */
     protected $_customerSession;
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory
      */
     private $subscriberCollectionFactory;
 
@@ -33,13 +33,13 @@ class Subscriber
      * @param \Ebizmarts\MageMonkey\Helper\Data $helper
      * @param \Magento\Customer\Model\Customer $customer
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory|\Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
      */
     public function __construct(
         \Ebizmarts\MageMonkey\Helper\Data $helper,
         \Magento\Customer\Model\Customer $customer,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
+        \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
     )
     {
         $this->_helper          = $helper;
