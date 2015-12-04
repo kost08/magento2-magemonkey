@@ -25,7 +25,7 @@ class Subscriber
      */
     protected $_customerSession;
     /**
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory
      */
     private $subscriberCollectionFactory;
 
@@ -33,13 +33,13 @@ class Subscriber
      * @param \Ebizmarts\MageMonkey\Helper\Data $helper
      * @param \Magento\Customer\Model\Customer $customer
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory|\Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
      */
     public function __construct(
         \Ebizmarts\MageMonkey\Helper\Data $helper,
         \Magento\Customer\Model\Customer $customer,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
+        \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
     )
     {
         $this->_helper          = $helper;
@@ -77,9 +77,12 @@ class Subscriber
                 $status = 'subscribed';
             }
             $data = array('list_id' => $this->_helper->getDefaultList(), 'email_address' => $subscriber->getEmail(), 'email_type' => 'html', 'status' => $status, /*'merge_fields' => $mergeVars*/);
+
             $subscriberCollection = $this->subscriberCollectionFactory->create();
             $collection = $subscriberCollection->load()
+                ->useOnlySubscribed()
                 ->addFieldToFilter("subscriber_email", array('eq' => $subscriber->getEmail()));
+
             if(!$collection->count()){
                 $return = $api->listCreateMember($this->_helper->getDefaultList(), json_encode($data));
                 if (isset($return->id)) {
@@ -156,6 +159,22 @@ class Subscriber
                     $subscriber->setMagemonkeyId($return->id)->save();
                 }
             }
+        }
+        return $result;
+    }
+
+    public function aroundDelete(
+        \Magento\Newsletter\Model\Subscriber $subscriber,
+        \Closure $proceed
+    )
+    {
+        $monkeyId = $subscriber->getMagemonkeyId();
+        $result = $proceed();
+        if($monkeyId);
+        {
+            $api = New \Ebizmarts\MageMonkey\Model\Api(array(),$this->_helper);
+            $return = $api->listDeleteMember($this->_helper->getDefaultList(), $monkeyId);
+            $result->setMagemonkeyId('')->save();
         }
         return $result;
     }

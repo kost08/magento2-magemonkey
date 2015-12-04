@@ -19,7 +19,7 @@ class Setup  extends \Magento\Framework\Module\Setup
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         $resourceName,
         $moduleName = 'Ebizmarts_MageMonkey',
         $connectionName = \Magento\Framework\Setup\ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
